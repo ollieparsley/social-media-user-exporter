@@ -1,6 +1,8 @@
 # social-media-user-exporter
 Prometheus exporter for gathering user account info on social media platforms
 
+# Still in development
+
 ## Usage
 
 The service is controlled by environment variables. By specifying the access credentials for a social media platform you enable it to run.
