@@ -1,0 +1,76 @@
+---
+kind: pipeline
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: docker-tags
+    image: golang:1.14.1
+    commands:
+      - make docker-tags
+
+  - name: deps
+    image: golang:1.14.1
+    commands:
+      - make deps
+    environment:
+      GO111MODULE: on
+      GOPATH: /drone
+
+  - name: build
+    image: golang:1.14.1
+    commands:
+      - make build
+    environment:
+      GO111MODULE: on
+      GOPATH: /drone
+    depends_on:
+      - deps
+
+  - name: test
+    image: golang:1.14.1
+    commands:
+      - make test
+    environment:
+      GO111MODULE: on
+      GOPATH: /drone
+    depends_on:
+      - deps
+
+  - name: docker-dr
+    image: plugins/docker
+    settings:
+      repo: ollieparsley/social-media-user-exporter
+      dockerfile: Dockerfile
+      username: ollieparsley
+      password:
+        from_secret: DOCKER_PASSWORD
+    when:
+      event:
+        - push
+      branch:
+        exclude:
+          - master
+    depends_on:
+      - build
+      - test
+
+  - name: docker
+    image: plugins/docker
+    settings:
+      repo: ollieparsley/social-media-user-exporter
+      dockerfile: Dockerfile
+      username: ollieparsley
+      password:
+        from_secret: DOCKER_PASSWORD
+    when:
+      event:
+        - push
+      branch:
+        - master
+    depends_on:
+      - build
+      - test
