@@ -122,7 +122,7 @@ func (p YouTube) getChannel() *youtube.Channel {
 	return foundChannel
 }
 
-// Format key with lavels
+// Fetch Format key with lavels
 func (p YouTube) Fetch() error {
 
 	channel := p.getChannel()
