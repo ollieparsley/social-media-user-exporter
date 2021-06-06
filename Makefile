@@ -64,6 +64,10 @@ build: deps
 	@mkdir -p $(DESTDIR)$(BINPATH)
 	go build -o $(DESTDIR)$(BINPATH)$(PKGNAME) ./main.go
 
+# Build a docker image
+docker_build:
+	docker build -t ollieparsley/social-media-user-exporter:$(VERSION) -t ollieparsley/social-media-user-exporter:latest .
+
 # Compile the application
 run:
 	SMUE_INTERVAL_SECONDS="300" \

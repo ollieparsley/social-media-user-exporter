@@ -94,7 +94,7 @@ func NewTwitter(logger *log.Logger, metricPrefix string, factory *promauto.Facto
 	}, nil
 }
 
-// Format key with lavels
+// Fetch Format key with lavels
 func (p Twitter) Fetch() error {
 
 	// Fetch rate limits
